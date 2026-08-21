@@ -1,0 +1,2 @@
+id,stage,kind,host,gpu,split_seed,init_seed,epochs,lr,batch_size,patience,save_checkpoint,best_val_mse,best_epoch,epochs_ran,train_seconds,test_mse,test_mae,test_r2,trainable_params,total_params,n_train,n_external,wall_seconds,status
+297ba50abd0a5498,PROBE,baseline,bio07,NVIDIA GeForce RTX 2060 SUPER,0,0,3,3e-05,64,3,False,0.6107174885390769,3,3,73.11235809326172,0.5877678397021333,0.5871541565528051,0.594563732442307,44375809,44375809,2940,0,77.56,ok

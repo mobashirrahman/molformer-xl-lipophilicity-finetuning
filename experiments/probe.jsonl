@@ -1,0 +1,1 @@
+{"stage": "PROBE", "kind": "baseline", "split_seed": 0, "init_seed": 0, "epochs": 3, "lr": 3e-05, "batch_size": 64, "patience": 3, "save_checkpoint": false, "id": "297ba50abd0a5498"}
