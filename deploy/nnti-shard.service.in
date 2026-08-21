@@ -1,0 +1,39 @@
+[Unit]
+Description=NNTI lipophilicity experiment sweep
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/mdra00001/NNTI_Project
+
+Environment=PYTHONPATH=/home/mdra00001/NNTI_Project
+Environment=PYTHONUNBUFFERED=1
+# /home is NFS with a per-user quota; all bulk caches must live on local scratch.
+Environment=HF_HOME=/scratch/mdra00001/hf-cache
+Environment=NETRC=/scratch/mdra00001/wandb-netrc
+Environment=WANDB_DIR=/scratch/mdra00001/wandb
+Environment=WANDB_CACHE_DIR=/scratch/mdra00001/wandb-cache
+Environment=WANDB_CONFIG_DIR=/scratch/mdra00001/wandb-config
+Environment=PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+Environment=TOKENIZERS_PARALLELISM=false
+
+ExecStart=/scratch/mdra00001/nnti-venv/bin/python \
+    /home/mdra00001/NNTI_Project/scripts/run_experiments.py \
+    --manifest /home/mdra00001/NNTI_Project/experiments/manifest.jsonl \
+    --results-dir /home/mdra00001/NNTI_Project/experiments/results \
+    --heartbeat-dir /home/mdra00001/NNTI_Project/experiments/heartbeat \
+    --artifacts /scratch/mdra00001/nnti-artifacts \
+    --wandb-project nnti-lipophilicity-rerun \
+    --shard-from-hosts /home/mdra00001/NNTI_Project/experiments/hosts.txt \
+    --stages __STAGES__
+
+# Resumable: on restart the driver reads every host's results CSV and skips
+# completed run ids, so a crash or reboot costs at most the run in flight.
+Restart=always
+RestartSec=30
+
+StandardOutput=append:/scratch/mdra00001/nnti-experiments.log
+StandardError=append:/scratch/mdra00001/nnti-experiments.log
+
+[Install]
+WantedBy=default.target

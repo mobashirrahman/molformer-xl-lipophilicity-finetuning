@@ -1,0 +1,41 @@
+[Unit]
+Description=NNTI lipophilicity experiment sweep
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/mdra00001/NNTI_Project
+
+Environment=PYTHONPATH=/home/mdra00001/NNTI_Project
+Environment=PYTHONUNBUFFERED=1
+# The home volume has a per-user quota that these caches will blow through.
+Environment=HF_HOME=/scratch/mdra00001/hf-cache
+# W&B credentials live here, not in $HOME; without this the tracker silently
+# falls back to offline mode.
+Environment=NETRC=/scratch/mdra00001/wandb-netrc
+Environment=WANDB_DIR=/scratch/mdra00001/wandb
+Environment=WANDB_CACHE_DIR=/scratch/mdra00001/wandb-cache
+Environment=WANDB_CONFIG_DIR=/scratch/mdra00001/wandb-config
+Environment=PIP_CACHE_DIR=/scratch/mdra00001/pip-cache
+Environment=PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+Environment=TOKENIZERS_PARALLELISM=false
+
+ExecStart=/scratch/mdra00001/nnti-venv/bin/python \
+    /home/mdra00001/NNTI_Project/scripts/run_experiments.py \
+    --manifest /home/mdra00001/NNTI_Project/experiments/manifest.jsonl \
+    --results /home/mdra00001/NNTI_Project/experiments/results.csv \
+    --artifacts /scratch/mdra00001/nnti-artifacts \
+    --heartbeat /home/mdra00001/NNTI_Project/experiments/heartbeat.json \
+    --wandb-project nnti-lipophilicity-rerun \
+    --stages B,C1,C2
+
+# The driver is resumable: on any crash or reboot it re-reads results.csv and
+# skips completed run ids, so restarting costs at most the run in flight.
+Restart=always
+RestartSec=30
+
+StandardOutput=append:/scratch/mdra00001/nnti-experiments.log
+StandardError=append:/scratch/mdra00001/nnti-experiments.log
+
+[Install]
+WantedBy=default.target

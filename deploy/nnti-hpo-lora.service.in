@@ -1,0 +1,29 @@
+[Unit]
+Description=NNTI stage D LoRA re-tune, widened range (Optuna worker)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/mdra00001/NNTI_Project
+
+Environment=PYTHONPATH=/home/mdra00001/NNTI_Project
+Environment=PYTHONUNBUFFERED=1
+Environment=HF_HOME=/scratch/mdra00001/hf-cache
+Environment=PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+Environment=TOKENIZERS_PARALLELISM=false
+Environment=TRIALS=__TRIALS__
+Environment=EPOCHS=__EPOCHS__
+
+# One script per host walks all four methods; every host joins the same four
+# studies through the shared journal. The unit file itself is on NFS-shared
+# /home, so it must be identical on every host -- no per-host substitution.
+ExecStart=/home/mdra00001/NNTI_Project/scripts/hpo_lora_only.sh
+
+Restart=on-failure
+RestartSec=30
+
+StandardOutput=append:/scratch/mdra00001/nnti-hpo-peft.log
+StandardError=append:/scratch/mdra00001/nnti-hpo-peft.log
+
+[Install]
+WantedBy=default.target

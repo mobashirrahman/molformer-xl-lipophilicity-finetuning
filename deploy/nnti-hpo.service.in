@@ -1,0 +1,34 @@
+[Unit]
+Description=NNTI stage A hyperparameter search (Optuna worker)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/mdra00001/NNTI_Project
+
+Environment=PYTHONPATH=/home/mdra00001/NNTI_Project
+Environment=PYTHONUNBUFFERED=1
+Environment=HF_HOME=/scratch/mdra00001/hf-cache
+Environment=PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+Environment=TOKENIZERS_PARALLELISM=false
+
+# Every host joins the same study through the shared journal on NFS; each
+# worker contributes trials until its own quota is met.
+ExecStart=/scratch/mdra00001/nnti-venv/bin/python \
+    /home/mdra00001/NNTI_Project/scripts/hpo.py \
+    --storage /home/mdra00001/NNTI_Project/experiments/hpo/journal.log \
+    --study stageA-baseline \
+    --trials __TRIALS__ \
+    --epochs 15 \
+    --splits 0,1
+
+# The study is durable in the journal, so a failed worker can simply rejoin;
+# on success the worker exits rather than restarting.
+Restart=on-failure
+RestartSec=30
+
+StandardOutput=append:/scratch/mdra00001/nnti-hpo.log
+StandardError=append:/scratch/mdra00001/nnti-hpo.log
+
+[Install]
+WantedBy=default.target
