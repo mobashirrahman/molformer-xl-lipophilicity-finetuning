@@ -1,4 +1,4 @@
-# Lipophilicity Prediction with MoLFormer
+# Lipophilicity Prediction with MoLFormer-XL
 
 Can additional molecular data improve a pretrained chemical language model?
 This project fine-tunes MoLFormer-XL to predict lipophilicity (`logD`) from
