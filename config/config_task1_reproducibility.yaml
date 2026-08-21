@@ -1,0 +1,17 @@
+method: grid
+parameters:
+  accumulation_steps:
+    value: 2
+  dropout:
+    value: 0.10385095729120164
+  epochs:
+    value: 15
+  lr:
+    value: 8.490662983039434e-05
+  mlm_epochs:
+    value: 1
+  train_batch_size:
+    value: 32
+  weight_decay:
+    value: 0.00341102069033503
+program: ./finetune_lipophilicity.py

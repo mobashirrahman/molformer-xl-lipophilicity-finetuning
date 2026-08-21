@@ -1,0 +1,34 @@
+method: bayes
+metric:
+  goal: minimize
+  name: final_test_mse
+parameters:
+  batch_size_train:
+    values:
+      - 64
+  early_stop_patience:
+    values:
+      - 3
+      - 5
+  fine_tune_epochs:
+    values:
+      - 10
+  fine_tune_lr:
+    distribution: uniform
+    max: 5e-05
+    min: 1e-05
+  lissa_damping:
+    values:
+      - 0.01
+      - 0.05
+  lissa_recursion_depth:
+    values:
+      - 50
+      - 100
+      - 150
+  lissa_scale:
+    values:
+      - 25
+      - 30
+      - 35
+program: ./task2.py

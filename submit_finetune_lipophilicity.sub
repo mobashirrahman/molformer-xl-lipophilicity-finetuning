@@ -1,0 +1,27 @@
+universe                = docker
+docker_image            = pytorch/pytorch:latest
+executable              = run_finetune_lipophilicity.sh
+arguments               = esb7uvc6
+transfer_input_files    = finetune_lipophilicity.py, requirements.txt
+
+# Redirect standard output, error, and log files to the desired folder
+output                  = results/task1/finetune_lipophilicity/finetune_task1.$(ClusterId).$(ProcId).out
+error                   = results/task1/finetune_lipophilicity/finetune_task1.$(ClusterId).$(ProcId).err
+log                     = results/task1/finetune_lipophilicity/finetune_task1.$(ClusterId).$(ProcId).log
+
+should_transfer_files   = YES
+when_to_transfer_output = ON_EXIT
+
+transfer_output_files   = checkpoints
+transfer_output_remaps  = "checkpoints=results/task1/finetune_lipophilicity/checkpoints"
+
+request_GPUs            = 1
+request_CPUs            = 4
+request_memory          = 16G
+requirements            = UidDomain == "cs.uni-saarland.de"
+getenv                  = HOME
++WantGPUHomeMounted     = true
+
+environment             = "WANDB_API_KEY=REDACTED_WANDB_API_KEY;WANDB_ENTITY=mobashirrahman-saarland-university;ANDB_PROJECT=nnti-project;WANDB_SWEEP=true"
+
+queue 1
