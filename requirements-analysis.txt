@@ -1,0 +1,5 @@
+# Additional dependencies for the rerun harness and analysis (see requirements.txt
+# for the model/training stack, which is version-pinned for reproducibility).
+scipy>=1.11
+optuna>=4.0
+pytest>=7.0
