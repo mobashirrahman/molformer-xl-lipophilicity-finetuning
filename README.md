@@ -124,7 +124,13 @@ evaluated over 5 splits × 3 seeds.
 
 These are the no-external-data controls with 95% confidence intervals. PEFT
 retained full-fine-tuning performance while updating between 0.11% and 1.66%
-of the model. None of the external-data selectors significantly changed its
+of the model. The intervals overlap, but the ordering is consistent rather
+than incidental: pairing every method within each split, seed and selection
+strategy, full fine-tuning ranked worst of the four in 51 of 75 blocks against
+18.75 expected by chance (binomial `p < 1e-5`). The gap is small — 0.008 RMSE
+between best and worst, about a fifth of the run-to-run SD — but updating 44M
+parameters on 2,940 training molecules was reliably no better than updating
+47k. None of the external-data selectors significantly changed its
 method's performance; the smallest uncorrected p-value among 16 comparisons
 was 0.205.
 
@@ -136,7 +142,7 @@ resumable sharding. All **3,805/3,805** planned runs completed successfully
 with no failed or duplicate IDs. The full chronology and additional diagnostics
 are preserved in [`EXPERIMENT_LOG.md`](./EXPERIMENT_LOG.md).
 
-Python 3.8+ and a CUDA-capable GPU are required for training.
+Python 3.9+ and a CUDA-capable GPU are required for training.
 
 ```bash
 python -m venv .venv
